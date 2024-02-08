@@ -5,15 +5,6 @@ d3.json(url).then(function(data) {
   
   });
 
-// function chooseColor(depth) {
-//     if (depth <= 1.0) return "pink";
-//         else if (depth > 1.0 & depth <= 2.5) return "#blue";
-//         else if (depth > 2.5 & depth <= 4.0) return "#green";
-//         else if (depth > 4.0 & depth <= 5.5) return "#yellow";
-//         else if (depth > 5.5 & depth <= 8.0) return "#orange";
-//         else if (depth > 8.0 & depth <= 20.0) return "red";
-//         else return "purple";
-//     }
 
 
     function chooseColor(depth) {
