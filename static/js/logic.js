@@ -5,16 +5,26 @@ d3.json(url).then(function(data) {
   
   });
 
-function chooseColor(depth) {
-    if (depth <= 1.0) return "#0264f7";
-        else if (depth > 1.0 & depth <= 2.5) return "#eff702";
-        else if (depth > 2.5 & depth <= 4.0) return "#e8a702";
-        else if (depth > 4.0 & depth <= 5.5) return "#d65104";
-        else if(depth > 5.5 & depth <= 8.0) return "#c20212";
-        else if (depth > 8.0 & depth <= 20.0) return "#850101";
-         else return "#E2FFAE";
-    }
+// function chooseColor(depth) {
+//     if (depth <= 1.0) return "pink";
+//         else if (depth > 1.0 & depth <= 2.5) return "#blue";
+//         else if (depth > 2.5 & depth <= 4.0) return "#green";
+//         else if (depth > 4.0 & depth <= 5.5) return "#yellow";
+//         else if (depth > 5.5 & depth <= 8.0) return "#orange";
+//         else if (depth > 8.0 & depth <= 20.0) return "red";
+//         else return "purple";
+//     }
 
+
+    function chooseColor(depth) {
+        if (depth <= 10) { return "#0264f7"; }
+            else if (depth > 10 && depth <= 25) { return "#eff702"; }
+            else if (depth > 25 && depth <= 40) {return "#e8a702";}
+            else if (depth > 40 && depth <= 55) {return "#d65104";}
+            else if(depth > 55 && depth <= 80) {return "#c20212";}
+            else if (depth > 80 && depth <= 200) {return "#850101";}
+             else {return "#E2FFAE";}
+        }
 
 function createFeatures(earthquakeData) {
     function onEachFeature(feature, layer) {
@@ -23,25 +33,30 @@ function createFeatures(earthquakeData) {
     }
 
     function createCircleMarker(feature, latlng){
-        let options = {
-        radius: feature.properties.mag*3,
-        color: "#000",
-        fillColor: chooseColor(feature.properties.mag),
-        weight: 1, 
-        opacity: 1, 
-        fillOpacity: 0
-        }
+        return L.circleMarker(latlng);
     }
 
     let quakes = L.geoJSON(earthquakeData, {
       onEachFeature: onEachFeature,
-      pointToLayer: createCircleMarker
+      pointToLayer: createCircleMarker,
+      style: function(feature){
+        return{
+        radius: feature.properties.mag*3,
+        color: "#000000",
+        fillColor: chooseColor(feature.geometry.coordinates[2]),
+        weight: 1, 
+        opacity: 1, 
+        fillOpacity: 0.8,
+        stroke: true
+        }
+    }
     });
 
 
     createMap(quakes);
   };
 
+ 
 
 function createMap(quakes) {
     
@@ -73,8 +88,7 @@ function createMap(quakes) {
     let legend = L.control({position: 'bottomright'});
       legend.onAdd = function() {
           let div = L.DomUtil.create('div', 'info legend');
-            let depth = [1.0, 2.5, 4.0, 5.5, 8.0];
-      
+            let depth = [1, 10, 25, 40, 55, 80];
           for (let i = 0; i < depth.length; i++) {
               div.innerHTML +=
                   '<i style="background:' + chooseColor(depth[i] + 1) + '"></i> ' +
